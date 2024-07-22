@@ -23,5 +23,20 @@ router.get('/weather/current/:location', function (req, res, next) {
 
 });
 
+router.get('/weather/forecast/:location/:days', function (req, res, next) {
+
+    owm.forecast(req.params.location, req.params.days, function (e, r) {
+        if (e) return next(e);
+        var code = parseInt(r.cod);
+        if (r && code !== 200) {
+            return res.send(code, {message: r.message});
+        }
+
+        return res.json(r);
+
+    });
+
+});
+
 
 module.exports = router;
